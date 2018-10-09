@@ -78,3 +78,25 @@ knitr::kable(digits = 2)
 
 The mean of proportion of "Excellent" Response in locations in NY varied a little among those years. The standard deviation of "Excellent" Response in locations in NY were almost the same among those years.
 
+---
+
+Make a five-panel plot that shows the average proportion in each response category for each year and each state.
+```{r 1.6}
+brfss_data %>% 
+  group_by(year, locationabbr, response) %>% 
+  summarise(mean_proportion = mean(data_value, na.rm =TRUE)) %>% 
+ggplot(aes(y = mean_proportion, x = year, color = locationabbr)) + 
+  geom_line(show.legend=F) + 
+  labs(
+    title = "panel plot category by response",
+    x = "Year",
+    y = "Proportion of Response"
+  ) +
+  facet_grid( ~ response) + 
+  theme_bw() + 
+  viridis::scale_color_viridis(
+    name = "State", 
+    discrete = TRUE)
+```
+
+We can see from the plot that globally, "Very Good" has the largest proportion among those response. The distribution of proportion of "Good" is very close to the distribution of "Very Good". The proportion of "Excellent" has median value among them. The proportion of "Good" is the least among them.
