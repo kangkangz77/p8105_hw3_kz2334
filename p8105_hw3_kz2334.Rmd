@@ -119,3 +119,18 @@ Instacart dataset tells imformation about transactions of online grocery shoppin
 *   There are `r count(distinct(instacart_data, order_id))` unique orders.
 *   `r round(mean(instacart_data$reordered)*100, 2)`% of products were not bought for the first time.
 *   The maximum times of orders for one person is `r max(instacart_data$order_number)`.
+
+---
+
+Find out how many aisles are there, and which aisles are the most items ordered from.
+```{r 2.2}
+instacart_data %>% 
+  group_by(aisle_id, aisle) %>% 
+  summarise( n = n_distinct(product_id)) %>% 
+  arrange(desc(n))
+```
+There are 134 aisles, and most items ordered, whose number is 943, are from  candy chocolate.
+
+---
+
+
