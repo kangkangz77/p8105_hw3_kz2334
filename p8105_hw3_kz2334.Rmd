@@ -44,8 +44,8 @@ CT, FL NC were observed at 7 locations in 2002. It shows that the program had gr
 Make a “spaghetti plot” that shows the number of locations in each state from 2002 to 2010.
 ```{r 1.4}
 brfss_data %>% 
-  distinct(locationdesc, locationabbr, year) %>% 
-  count(locationabbr, year) %>% 
+  group_by(locationabbr, year) %>% 
+  summarise(n = n_distinct(locationdesc)) %>% 
 ggplot(aes(y = n, x = year, color = locationabbr)) + 
   geom_line() + 
   labs(
@@ -62,3 +62,19 @@ ggplot(aes(y = n, x = year, color = locationabbr)) +
 ```
 
 We can see that the numbers of locations in majority of states fluctuated within [0, 10] from 2002 to 2010. There was a state with number less than 10 in 2006, then rapidly grow up to larger than 40 in 2007. 
+
+---
+
+Make a table showing, for the years 2002, 2006, and 2010, the mean and standard deviation of the proportion of “Excellent” responses across locations in NY State.
+```{r 1.5}
+brfss_data %>%
+  filter(year %in% c(2002, 2006, 2010), locationabbr == "NY") %>% 
+  group_by(year, response) %>% 
+  summarise(mean = mean(data_value),
+            standard_deviation = sd(data_value)) %>% 
+  filter(response == "Excellent") %>% 
+knitr::kable(digits = 2)
+```
+
+The mean of proportion of "Excellent" Response in locations in NY varied a little among those years. The standard deviation of "Excellent" Response in locations in NY were almost the same among those years.
+
