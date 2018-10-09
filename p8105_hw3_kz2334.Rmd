@@ -41,6 +41,7 @@ brfss_data %>%
 CT, FL NC were observed at 7 locations in 2002. It shows that the program had great attention to those three states in 2002.
 
 ---
+
 Make a “spaghetti plot” that shows the number of locations in each state from 2002 to 2010.
 ```{r 1.4}
 brfss_data %>% 
@@ -129,7 +130,7 @@ instacart_data %>%
   summarise( n = n_distinct(product_id)) %>% 
   arrange(desc(n))
 ```
-There are 134 aisles, and most items ordered, whose number is 943, are from  candy chocolate.
+There are 134 aisles, and most items ordered, whose number is 943, are from  candy chocolate. Top 3 items, lucluding chocolate, yogurt and ice cream, are all desserts. 
 
 ---
 
@@ -148,6 +149,8 @@ instacart_data %>%
   theme_bw()
 ```
 
+The number of items ordered in each aisle varied a lot. The maximum almost reachs 1000, while the minimum is close to zero.
+
 ---
 
 Make a table showing the most popular item aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.
@@ -161,3 +164,19 @@ instacart_data %>%
   knitr::kable(digits = 0)
 ```
 
+In “baking ingredients”, Light Brown Sugar is the most popular product. In “packaged vegetables fruits”, Organic Baby Spinach is the most popular, ordered by 9784 times. The most popular product in “dog food care” was only ordered by 30 times.
+
+---
+
+Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week.
+```{r 2.5}
+instacart_data %>%
+  group_by(order_dow, product_name) %>% 
+  filter(product_name %in% c(
+    "Pink Lady Apples", "Coffee Ice Cream")) %>% 
+  summarise(mean_hour = mean(order_hour_of_day, rm.na = TRUE)) %>% 
+  spread(key = order_dow, value = mean_hour) %>% 
+  knitr::kable(digits = 1)
+```
+
+Coffee Ice Cream was most ordered on Tuesday, while Pink Lady Apples was most ordered on Wednesday.
