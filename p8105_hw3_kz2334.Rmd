@@ -133,7 +133,7 @@ There are 134 aisles, and most items ordered, whose number is 943, are from  can
 
 ---
 
-Make a plot that shows the number of items ordered in each aisle. Order aisles sensibly, and organize your plot so others can read it.
+Make a plot that shows the number of items ordered in each aisle. 
 ```{r 2.3}
 instacart_data %>% 
   distinct(product_id, aisle_id, aisle) %>% 
@@ -148,4 +148,16 @@ instacart_data %>%
   theme_bw()
 ```
 
+---
+
+Make a table showing the most popular item aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.
+
+```{r 2.4, warning = FALSE}
+instacart_data %>% 
+  group_by(aisle, product_name) %>% 
+  summarise( n = n()) %>% 
+  filter(min_rank(desc(n)) < 2, aisle %in% c("baking ingredients", 
+                                        "dog food care", "packaged vegetables fruits")) %>% 
+  knitr::kable(digits = 0)
+```
 
