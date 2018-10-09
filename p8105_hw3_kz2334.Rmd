@@ -210,3 +210,14 @@ NY NOAA dataset tells imformation about snow weather in NYC.
 *   The maximum snowfall in one day is `r max(ny_noaa$snow, na.rm = TRUE)` mm.
 *   The mean of precipitation is `r round(mean(ny_noaa$prcp, na.rm = TRUE)/10, 2)` mm.
 *   The mean of max temprature is `r round(mean(ny_noaa$tmax, na.rm = TRUE)/10, 2)` ºC.
+
+---
+
+Create separate variables for year, month, and day. Ensure variables are given in reasonable units.
+```{r 3.3}
+ny_noaa = 
+  ny_noaa %>% 
+  separate(date, c("Year", "Month", "Day"), sep = "-") %>% 
+  mutate(prcp = prcp / 10, tmax = tmax / 10, tmin = tmin / 10)
+```
+
