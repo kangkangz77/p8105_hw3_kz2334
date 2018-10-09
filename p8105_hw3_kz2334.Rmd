@@ -26,9 +26,6 @@ brfss_data = brfss_smart2010 %>%
                                                   "Good", "Fair", "Poor")) %>% 
   mutate(response = factor(response, ordered = TRUE, levels = 
                           c("Poor", "Fair", "Good", "Very good", "Excellent")))
-
-brfss_data
-
 ```
 
 ---
@@ -41,4 +38,27 @@ brfss_data %>%
   filter(year == 2002, n == 7)
 ```
 
-CT, FL NC were observed at 7 locations in 2002.
+CT, FL NC were observed at 7 locations in 2002. It shows that the program had great attention to those three states in 2002.
+
+---
+Make a “spaghetti plot” that shows the number of locations in each state from 2002 to 2010.
+```{r 1.4}
+brfss_data %>% 
+  distinct(locationdesc, locationabbr, year) %>% 
+  count(locationabbr, year) %>% 
+ggplot(aes(y = n, x = year, color = locationabbr)) + 
+  geom_line() + 
+  labs(
+    title = "spaghetti plot",
+    x = "Year",
+    y = "Number of Locations"
+  ) +
+  theme_bw() + 
+  viridis::scale_color_viridis(
+    name = "State", 
+    discrete = TRUE
+  ) 
+  
+```
+
+We can see that the numbers of locations in majority of states fluctuated within [0, 10] from 2002 to 2010. There was a state with number less than 10 in 2006, then rapidly grow up to larger than 40 in 2007. 
