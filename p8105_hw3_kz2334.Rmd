@@ -133,4 +133,19 @@ There are 134 aisles, and most items ordered, whose number is 943, are from  can
 
 ---
 
+Make a plot that shows the number of items ordered in each aisle. Order aisles sensibly, and organize your plot so others can read it.
+```{r 2.3}
+instacart_data %>% 
+  distinct(product_id, aisle_id, aisle) %>% 
+  ggplot(aes(x = aisle_id)) +
+  geom_histogram( bins = 134, fill = "black", color = "white") +
+  scale_x_continuous(breaks = seq(0, 134, 5)) +
+  labs(
+    title = "Number of items ordered in each aisle",
+    x = "Aisle ID",
+    y = "Number of items"
+  ) +
+  theme_bw()
+```
+
 
