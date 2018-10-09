@@ -5,3 +5,13 @@ date: "10/8/2018"
 output: github_document
 ---
 
+##Problem 1 
+
+
+Load required packages.
+```{r 1.1}
+library(tidyverse)
+devtools::install_github("p8105/p8105.datasets")
+library(p8105.datasets)
+```
+
