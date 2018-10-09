@@ -219,5 +219,18 @@ ny_noaa =
   ny_noaa %>% 
   separate(date, c("Year", "Month", "Day"), sep = "-") %>% 
   mutate(prcp = prcp / 10, tmax = tmax / 10, tmin = tmin / 10)
+
+ny_noaa
 ```
 
+Find out the most commonly observed values for snowfall.
+```{r 3.4}
+ny_noaa %>% 
+  group_by(snow) %>% 
+  summarise( n_obs = n()) %>% 
+  arrange(desc(n_obs)) %>% 
+  head(5) %>% 
+  knitr::kable()
+```
+
+The most commonly observed values for snowfall is 0, 25, 13 and 51. Majority of time there were no snowfall in New York states.
