@@ -99,4 +99,23 @@ ggplot(aes(y = mean_proportion, x = year, color = locationabbr)) +
     discrete = TRUE)
 ```
 
-We can see from the plot that globally, "Very Good" has the largest proportion among those response. The distribution of proportion of "Good" is very close to the distribution of "Very Good". The proportion of "Excellent" has median value among them. The proportion of "Good" is the least among them.
+We can see from the plot that globally, "Very Good" has the largest proportion among those response. The distribution of proportion of "Good" is very close to the distribution of "Very Good". The proportion of "Excellent" has median value among them. The proportion of "Poor" is the least among them.
+
+##Problem 2
+
+Load the instacart data and do some data cleaning.
+```{r 2.1}
+data(instacart)
+instacart_data = instacart %>% 
+  janitor::clean_names() 
+
+instacart_data
+```
+
+Instacart dataset tells imformation about transactions of online grocery shopping. 
+
+*   The size of the dataset is (`r dim(instacart_data)`). 
+*   It contains integer and chracter variables. 
+*   There are `r count(distinct(instacart_data, order_id))` unique orders.
+*   `r round(mean(instacart_data$reordered)*100, 2)`% of products were not bought for the first time.
+*   The maximum times of orders for one person is `r max(instacart_data$order_number)`.
