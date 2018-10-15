@@ -18,6 +18,7 @@ library(p8105.datasets)
 ---
 
 Load the BRFSS data and do some data cleaning.
+
 ```{r 1.2}
 data(brfss_smart2010)
 brfss_data = brfss_smart2010 %>% 
@@ -62,7 +63,7 @@ ggplot(aes(y = n, x = year, color = locationabbr)) +
   
 ```
 
-We can see that the numbers of locations in majority of states fluctuated within [0, 10] from 2002 to 2010. There was a state with number less than 10 in 2006, then rapidly grow up to larger than 40 in 2007. 
+We can see that the numbers of locations in majority of states fluctuated within [0, 10] from 2002 to 2010. There was a state with number of locations less than 10 in 2006, then rapidly grew up to larger than 40 in 2007. 
 
 ---
 
@@ -82,12 +83,13 @@ The mean of proportion of "Excellent" Response in locations in NY varied a littl
 ---
 
 Make a five-panel plot that shows the average proportion in each response category for each year and each state.
+
 ```{r 1.6}
 brfss_data %>% 
   group_by(year, locationabbr, response) %>% 
   summarise(mean_proportion = mean(data_value, na.rm =TRUE)) %>% 
 ggplot(aes(y = mean_proportion, x = year, color = locationabbr)) + 
-  geom_line(show.legend=F) + 
+  geom_line(show.legend = FALSE) + 
   labs(
     title = "panel plot category by response",
     x = "Year",
@@ -100,11 +102,12 @@ ggplot(aes(y = mean_proportion, x = year, color = locationabbr)) +
     discrete = TRUE)
 ```
 
-We can see from the plot that globally, "Very Good" has the largest proportion among those response. The distribution of proportion of "Good" is very close to the distribution of "Very Good". The proportion of "Excellent" has median value among them. The proportion of "Poor" is the least among them.
+We can see from the plot that globally, "Very Good" has the largest proportion among those response. The distribution of proportion of "Good" is very close to the distribution of "Very Good". The proportion of "Excellent" has median value among them. The proportion of "Poor" is the least among five repsonses.
 
 ##Problem 2
 
 Load the instacart data and do some data cleaning.
+
 ```{r 2.1}
 data(instacart)
 instacart_data = instacart %>% 
@@ -116,14 +119,17 @@ instacart_data
 Instacart dataset tells imformation about transactions of online grocery shopping. 
 
 *   The size of the dataset is (`r dim(instacart_data)`). 
-*   It contains integer and chracter variables. 
+*   It is a dataframe, containing integer and chracter variables. 
 *   There are `r count(distinct(instacart_data, order_id))` unique orders.
-*   `r round(mean(instacart_data$reordered)*100, 2)`% of products were not bought for the first time.
+*   `reordered` equals 1 if this prodcut has been ordered by this user in the past, 0 otherwise. `r round(mean(instacart_data$reordered)*100, 2)`% of products were not bought for the first time.
+*   `order_hour_of_day` recorded the hour of the day on which the order was placed.
 *   The maximum times of orders for one person is `r max(instacart_data$order_number)`.
+*   `order_dow` represents the day of the week on which the order was placed. In which, I assume that `0` represents Sunday, `1 - 6` represents Monday to Friday.
 
 ---
 
 Find out how many aisles are there, and which aisles are the most items ordered from.
+
 ```{r 2.2}
 instacart_data %>% 
   group_by(aisle_id, aisle) %>% 
@@ -164,11 +170,12 @@ instacart_data %>%
   knitr::kable(digits = 0)
 ```
 
-In “baking ingredients”, Light Brown Sugar is the most popular product. In “packaged vegetables fruits”, Organic Baby Spinach is the most popular, ordered by 9784 times. The most popular product in “dog food care” was only ordered by 30 times.
+In “baking ingredients”, Light Brown Sugar orderer by 499 times is the most popular product. In “packaged vegetables fruits”, Organic Baby Spinach is the most popular, ordered by 9784 times. The most popular product in “dog food care” was only ordered by 30 times.
 
 ---
 
 Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week.
+
 ```{r 2.5}
 instacart_data %>%
   group_by(order_dow, product_name) %>% 
@@ -179,7 +186,7 @@ instacart_data %>%
   knitr::kable(digits = 1)
 ```
 
-Coffee Ice Cream was most ordered on Tuesday, while Pink Lady Apples was most ordered on Wednesday.
+Globally, Coffee Ice Cream was ordered later than Pink Lady Apples every weekday except for Friday. The mean hour of the day Coffee Ice Cream was ordered is later than 12am every weekday, while the mean hour of four weekdays Pink Lady Apples was ordered earlier than 12am.
 
 ---
 
@@ -206,7 +213,7 @@ NY NOAA dataset tells imformation about snow weather in NYC.
 
 *   The size of the dataset is (`r dim(ny_noaa)`). 
 *   It contains integer, date and chracter variables. 
-*   tmax and tmin have the most missing values, extent to around 1 million.
+*   tmax and tmin have the most missing values, extent to around 1 million.This is because about one half of the stations report precipitation only.
 *   The maximum snowfall in one day is `r max(ny_noaa$snow, na.rm = TRUE)` mm.
 *   The mean of precipitation is `r round(mean(ny_noaa$prcp, na.rm = TRUE)/10, 2)` mm.
 *   The mean of max temprature is `r round(mean(ny_noaa$tmax, na.rm = TRUE)/10, 2)` ºC.
@@ -217,13 +224,15 @@ Create separate variables for year, month, and day. Ensure variables are given i
 ```{r 3.3}
 ny_noaa = 
   ny_noaa %>% 
-  separate(date, c("Year", "Month", "Day"), sep = "-") %>% 
-  mutate(prcp = prcp / 10, tmax = tmax / 10, tmin = tmin / 10)
+  separate(date, c("year", "month", "day"), sep = "-") %>% 
+  mutate(prcp = prcp/10, tmax = tmax/10, tmin = tmin/10, 
+         year = as.integer(year), month = as.integer(month),
+              day = as.integer(day))
 
 ny_noaa
 ```
 
-Find out the most commonly observed values for snowfall.
+Find out the most commonly observed values for snowfall. Top 5 values are shown below.
 ```{r 3.4}
 ny_noaa %>% 
   group_by(snow) %>% 
@@ -234,3 +243,55 @@ ny_noaa %>%
 ```
 
 The most commonly observed values for snowfall is 0, 25, 13 and 51. Majority of time there were no snowfall in New York states.
+
+---
+
+Make a two-panel plot showing the average temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
+```{r 3.5}
+ny_noaa %>% 
+  filter(month %in% c(01, 07), !is.na(tmax)) %>% 
+  group_by(id, year, month) %>% 
+  summarise(mean_tmax = mean(tmax, na.rm = TRUE)) %>% 
+  ggplot(aes(x = year, y = mean_tmax, color = id)) +
+  geom_line(show.legend = FALSE) + 
+  labs(
+    title = "Maximum temperature in January and July", 
+    x = "year",
+    y = "Maximum temperature (ºC)"
+  ) + 
+  facet_grid( ~ month) + 
+  viridis::scale_color_viridis(discrete = TRUE)
+```
+
+Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option) (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
+
+```{r 3.6}
+devtools::install_github("thomasp85/patchwork")
+library(patchwork)
+
+plot1 = ny_noaa %>% 
+  filter(!is.na(tmax) & !is.na(tmin)) %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_hex(bins = 50) +
+  labs(
+    title = "Maximum temperature vs Minimum temperature",
+    x = "Maximum temperature (ºC)",
+    y = "Minimum temperature (ºC)"
+  ) 
+
+plot2 = ny_noaa %>% 
+  filter(snow > 0 & snow < 100) %>% 
+  mutate(year = as.factor(year)) %>% 
+  ggplot() +
+  geom_boxplot(aes(x = year, y = snow), alpha = .4) + 
+  labs(
+    title = "Distribution of snowfall values by year",
+    x = "ear",
+    y = "Snowfall(mm)"
+  ) +
+  viridis::scale_fill_viridis(discrete = TRUE) + 
+  theme_bw() 
+
+plot1 / plot2
+```
+
