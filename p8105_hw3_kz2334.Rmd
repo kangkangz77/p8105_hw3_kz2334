@@ -212,7 +212,7 @@ ny_noaa %>%
 NY NOAA dataset tells imformation about snow weather in NYC. 
 
 *   The size of the dataset is (`r dim(ny_noaa)`). 
-*   It contains integer, date and chracter variables. 
+*   It is a dataframe, contains integer, date and chracter variables. 
 *   tmax and tmin have the most missing values, extent to around 1 million.This is because about one half of the stations report precipitation only.
 *   The maximum snowfall in one day is `r max(ny_noaa$snow, na.rm = TRUE)` mm.
 *   The mean of precipitation is `r round(mean(ny_noaa$prcp, na.rm = TRUE)/10, 2)` mm.
@@ -286,7 +286,10 @@ plot1 = ny_noaa %>%
 plot2 = ny_noaa %>% 
   filter(snow > 0 & snow < 100) %>% 
   mutate(year = as.factor(year)) %>% 
-  ggplot() +
+  ggplot() + 
+  theme(axis.title.x=element_blank(), 
+     axis.text.x=element_blank(), 
+     axis.ticks.x=element_blank()) +
   geom_boxplot(aes(x = year, y = snow, color = year), alpha = .4) + 
   labs(
     title = "Distribution of snowfall values by year",
@@ -294,8 +297,7 @@ plot2 = ny_noaa %>%
     y = "Snowfall(mm)"
   ) +
   viridis::scale_color_viridis(discrete = TRUE) + 
-  theme_bw() + 
-  theme(legend.position = "bottom")
+  theme_bw() 
 
 plot1 / plot2
 ```
