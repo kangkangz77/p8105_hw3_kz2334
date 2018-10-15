@@ -253,7 +253,7 @@ ny_noaa %>%
   group_by(id, year, month) %>% 
   summarise(mean_tmax = mean(tmax, na.rm = TRUE)) %>% 
   ggplot(aes(x = year, y = mean_tmax, color = id)) +
-  geom_line(show.legend = FALSE) + 
+  geom_point(show.legend = FALSE) + 
   labs(
     title = "Maximum temperature in January and July", 
     x = "year",
@@ -263,35 +263,5 @@ ny_noaa %>%
   viridis::scale_color_viridis(discrete = TRUE)
 ```
 
-Make a two-panel plot showing (i) tmax vs tmin for the full dataset (note that a scatterplot may not be the best option) (ii) make a plot showing the distribution of snowfall values greater than 0 and less than 100 separately by year.
-
-```{r 3.6}
-devtools::install_github("thomasp85/patchwork")
-library(patchwork)
-
-plot1 = ny_noaa %>% 
-  filter(!is.na(tmax) & !is.na(tmin)) %>% 
-  ggplot(aes(x = tmin, y = tmax)) +
-  geom_hex(bins = 50) +
-  labs(
-    title = "Maximum temperature vs Minimum temperature",
-    x = "Maximum temperature (ºC)",
-    y = "Minimum temperature (ºC)"
-  ) 
-
-plot2 = ny_noaa %>% 
-  filter(snow > 0 & snow < 100) %>% 
-  mutate(year = as.factor(year)) %>% 
-  ggplot() +
-  geom_boxplot(aes(x = year, y = snow), alpha = .4) + 
-  labs(
-    title = "Distribution of snowfall values by year",
-    x = "ear",
-    y = "Snowfall(mm)"
-  ) +
-  viridis::scale_fill_viridis(discrete = TRUE) + 
-  theme_bw() 
-
-plot1 / plot2
-```
+We can see that mean maximum tempature in July is globally higher than it in January. We can find some spots is out the area of majority of spots. For example, in 1981 January, a purple spot is much lower than other spots. 
 
